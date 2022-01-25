@@ -17,8 +17,7 @@ namespace BulkAudio {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        public static string encoderDir = "";
-        public static string FFmpegDir = "";
+        public static string FFmpegDir = null;
         public string inpWavDir;
         public string outWavDir;
         List<string> filesToConvert = new List<string>();
@@ -52,7 +51,6 @@ namespace BulkAudio {
 
         public void fillInputAudioList() {
             Mouse.OverrideCursor = Cursors.Wait;
-            if (encoderDir == "") encoderDir = null;
             txtb_inputpath.Text = inpWavDir;
             txtb_outputpath.Text = outWavDir;
             var ext = new List<string> { "wav", "mp3", "ogg", "flac", "m4a" };
@@ -75,7 +73,7 @@ namespace BulkAudio {
 
         private void btn_inputselect_Click(object sender, RoutedEventArgs e) {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.Title = "Select Profile";
+            dialog.Title = "Select Input Folder";
             dialog.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok) {
@@ -86,7 +84,7 @@ namespace BulkAudio {
 
         private void btn_outputselect_Click(object sender, RoutedEventArgs e) {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.Title = "Select Profile";
+            dialog.Title = "Select Output Folder";
             dialog.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok) {
@@ -101,6 +99,36 @@ namespace BulkAudio {
 
         private void btn_outputopen_Click(object sender, RoutedEventArgs e) {
             Process.Start(outWavDir);
+        }
+
+        private void btn_clearInput_Click (object sender, RoutedEventArgs e) {
+            string message = "Delete Contents of Input Folder?" + Environment.NewLine + "This action is not reversible.";
+            string title = "Delete Contents";
+            MessageBoxButton buttons = MessageBoxButton.YesNo;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxResult result = MessageBox.Show(message, title, buttons, icon);
+            switch (result) {
+                case MessageBoxResult.Yes:
+                    Directory.Delete(inpWavDir, true);
+                    Directory.CreateDirectory(inpWavDir);
+                    fillInputAudioList();
+                    break;
+            }
+        }
+
+        private void btn_clearOutput_Click(object sender, RoutedEventArgs e) {
+            string message = "Delete Contents of Output Folder?" + Environment.NewLine + "This action is not reversible.";
+            string title = "Delete Contents";
+            MessageBoxButton buttons = MessageBoxButton.YesNo;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxResult result = MessageBox.Show(message, title, buttons, icon);
+            switch (result) {
+                case MessageBoxResult.Yes:
+                    Directory.Delete(outWavDir, true);
+                    Directory.CreateDirectory(outWavDir);
+                    fillInputAudioList();
+                    break;
+            }
         }
 
         private void btn_refresh_Click(object sender, RoutedEventArgs e) {
@@ -151,72 +179,71 @@ namespace BulkAudio {
         private void btn_run_Click(object sender, RoutedEventArgs e) {
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
             fillInputAudioList();
-            if (FFmpegDir != "" & inpWavDir != "" & outWavDir != "") {
+            if (FFmpegDir != null & inpWavDir != "" & outWavDir != "") {
                 Mouse.OverrideCursor = Cursors.Wait;
-                using (Process EncTool = new Process()) {
-                    string saveArgs = null;
-                    EncTool.StartInfo.FileName = encoderDir;
-                    EncTool.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    foreach (string soundInput in filesToConvert) {
-                        string outFile = null;
-                        outFile = soundInput.Replace(inpWavDir, outWavDir);
-                        if (combo_channels.SelectedIndex == 1) outFile = Path.ChangeExtension(outFile, ".wav");
-                        if (combo_channels.SelectedIndex == 2) outFile = Path.ChangeExtension(outFile, ".mp3");
-                        if (combo_channels.SelectedIndex == 3) outFile = Path.ChangeExtension(outFile, ".flac");
-                        if (combo_channels.SelectedIndex == 4) outFile = Path.ChangeExtension(outFile, ".ogg");
+                string saveArgs = null;
+                foreach (string soundInput in filesToConvert) {
+                    string outFile = null;
+                    outFile = soundInput.Replace(inpWavDir, outWavDir);
+                    if (combo_channels.SelectedIndex == 1) outFile = Path.ChangeExtension(outFile, ".wav");
+                    if (combo_channels.SelectedIndex == 2) outFile = Path.ChangeExtension(outFile, ".mp3");
+                    if (combo_channels.SelectedIndex == 3) outFile = Path.ChangeExtension(outFile, ".flac");
+                    if (combo_channels.SelectedIndex == 4) outFile = Path.ChangeExtension(outFile, ".ogg");
 
-                        Directory.CreateDirectory(Path.GetDirectoryName(outFile));
+                    string remix = "";
+                    if (remix_channels.SelectedIndex == 1) remix = "-ac 1 ";
+                    if (remix_channels.SelectedIndex == 2) remix = "-ac 2 ";
 
-                        //Convert/copy and/or normalize to output directory
-                        using (Process ffmpeg = new Process()) {
-                            ffmpeg.StartInfo.FileName = FFmpegDir;
-                            ffmpeg.StartInfo.CreateNoWindow = true;
-                            ffmpeg.StartInfo.UseShellExecute = false;
-                            ffmpeg.StartInfo.RedirectStandardError = true;
+                    Directory.CreateDirectory(Path.GetDirectoryName(outFile));
 
-                            //Normalize and convert
-                            string segmentvol = "";
-                            if (txtb_loudness.Text != "" && (Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
-                                ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
-                                saveArgs += "> ffmpeg " + ffmpeg.StartInfo.Arguments + "\r\n";
-                                ffmpeg.Start();
-                                string output = ffmpeg.StandardError.ReadToEnd();
-                                ffmpeg.WaitForExit();
+                    //FFMpeg
+                    using (Process ffmpeg = new Process()) {
+                        ffmpeg.StartInfo.FileName = FFmpegDir;
+                        ffmpeg.StartInfo.CreateNoWindow = true;
+                        ffmpeg.StartInfo.UseShellExecute = false;
+                        ffmpeg.StartInfo.RedirectStandardError = true;
+                        string segmentvol = "";
 
-                                string ffmpegjson = output.Substring(output.IndexOf('{'));
-                                dynamic results = JsonConvert.DeserializeObject<dynamic>(ffmpegjson);
-                                float lufs = (float)results.input_i;
-                                string volume = (Math.Pow(10, (-(lufs - (Convert.ToInt32(txtb_loudness.Text))) / 20))).ToString();
-                                segmentvol = "-af \"volume = " + volume + "\" ";
-                            }
-
-                            else if (txtb_loudness.Text != "" && !(Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
-                                SystemSounds.Hand.Play();
-                                Mouse.OverrideCursor = null;
-                                return;
-                            }
-
-                            ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" " + segmentvol + "\"" + outFile + "\"";
-                            saveArgs += "> ffmpeg" + ffmpeg.StartInfo.Arguments + "\r\n";
+                        if (txtb_loudness.Text != "" && (Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
+                            ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
+                            saveArgs += "> ffmpeg " + ffmpeg.StartInfo.Arguments + "\r\n";
                             ffmpeg.Start();
+                            string output = ffmpeg.StandardError.ReadToEnd();
                             ffmpeg.WaitForExit();
 
-
+                            string ffmpegjson = output.Substring(output.IndexOf('{'));
+                            dynamic results = JsonConvert.DeserializeObject<dynamic>(ffmpegjson);
+                            float lufs = (float)results.input_i;
+                            string volume = (Math.Pow(10, (-(lufs - (Convert.ToInt32(txtb_loudness.Text))) / 20))).ToString();
+                            segmentvol = "-af \"volume = " + volume + "\" ";
                         }
 
-                        //Save output
-                        File.WriteAllText(Path.GetDirectoryName(FFmpegDir) + "\\log.txt", saveArgs);
+                        else if (txtb_loudness.Text != "" && !(Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
+                            SystemSounds.Hand.Play();
+                            Mouse.OverrideCursor = null;
+                            return;
+                        }
+
+                        ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" " + segmentvol + remix + "\"" + outFile + "\"";
+                        saveArgs += "> ffmpeg" + ffmpeg.StartInfo.Arguments + "\r\n";
+                        ffmpeg.Start();
+                        ffmpeg.WaitForExit();
+
+
                     }
 
-                    Mouse.OverrideCursor = null;
-
-                    string message = "Conversion Complete. Open output folder?";
-                    string title = "Conversion Complete";
-                    MessageBoxButton buttons = MessageBoxButton.YesNo;
-                    MessageBoxImage icon = MessageBoxImage.Information;
-                    MessageBoxResult result = MessageBox.Show(message, title, buttons, icon);
-                    if (result == MessageBoxResult.Yes) Process.Start(outWavDir);
+                    //Save output
+                    File.WriteAllText(Path.GetDirectoryName(FFmpegDir) + "\\log.txt", saveArgs);
                 }
+
+                Mouse.OverrideCursor = null;
+
+                string message = "Conversion Complete. Open output folder?";
+                string title = "Conversion Complete";
+                MessageBoxButton buttons = MessageBoxButton.YesNo;
+                MessageBoxImage icon = MessageBoxImage.Information;
+                MessageBoxResult result = MessageBox.Show(message, title, buttons, icon);
+                if (result == MessageBoxResult.Yes) Process.Start(outWavDir);
             }
         }
 

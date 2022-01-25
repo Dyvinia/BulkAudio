@@ -104,11 +104,69 @@
 
         <Grid Margin="5,70,5,5" Background="#FF141414">
             <TextBlock Margin="26,14,502,0" TextWrapping="Wrap" Text="Input Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
+            <Button x:Name="btn_clearInput" Margin="470,24,0,0" Click="btn_clearInput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                <Button.ToolTip>
+                    <ToolTip Background="Black" Foreground="White" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
+                        Clear Input Folder
+                    </ToolTip>
+                </Button.ToolTip>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Background" Value="#00000000"/>
+                        <Setter Property="Foreground" Value="#FFF1F1F1"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
             <TextBox x:Name="txtb_inputpath" Height="20" Margin="25,35,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
             <Button x:Name="btn_inputselect" Content="Select..." Margin="484,35,0,0" Height="20" HorizontalAlignment="Left" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
             <Button x:Name="btn_inputopen" Content="Open" Margin="0,35,25,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputopen_Click" VerticalAlignment="Top"/>
 
             <TextBlock Margin="26,59,502,0" TextWrapping="Wrap" Text="Output Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
+            <Button x:Name="btn_clearOutput" Margin="470,69,0,0" Click="btn_clearOutput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                <Button.ToolTip>
+                    <ToolTip Background="Black" Foreground="White" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
+                        Clear Output Folder
+                    </ToolTip>
+                </Button.ToolTip>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Background" Value="#00000000"/>
+                        <Setter Property="Foreground" Value="#FFF1F1F1"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
             <TextBox x:Name="txtb_outputpath" Height="20" Margin="25,80,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
             <Button x:Name="btn_outputselect" Content="Select..." Margin="0,80,92,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
             <Button x:Name="btn_outputopen" Content="Open" Margin="0,80,25,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_outputopen_Click" VerticalAlignment="Top"/>
@@ -133,6 +191,14 @@
                 <ComboBoxItem Content="FLAC"/>
                 <ComboBoxItem Content="OGG"/>
             </ComboBox>
+
+            <TextBlock Margin="26,217,0,0" TextWrapping="Wrap" Text="Remix Channels" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
+            <ComboBox x:Name="remix_channels" Margin="25,238,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" HorizontalAlignment="Left" Width="175">
+                <ComboBoxItem Content="No Change"/>
+                <ComboBoxItem Content="Mono"/>
+                <ComboBoxItem Content="Stereo"/>
+            </ComboBox>
+
 
             <TextBlock Margin="216,124,221,0" TextWrapping="Wrap" Text="Audio Files" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
             <Button x:Name="btn_refresh" Margin="0,121,25,0" HorizontalAlignment="Right" Height="20" Width="20" Click="btn_refresh_Click" VerticalAlignment="Top">
