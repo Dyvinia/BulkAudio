@@ -27,7 +27,7 @@ namespace BulkAudio {
             InitializeComponent();
 
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
-            //txt_Version.Text = "v" + version;
+            txt_Version.Text = "v" + version;
 
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input");
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
@@ -224,9 +224,6 @@ namespace BulkAudio {
         private void window_MouseDown(object sender, MouseButtonEventArgs e) {
             Keyboard.ClearFocus();
         }
-
-
-
 
 
     }
