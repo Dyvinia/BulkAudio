@@ -103,12 +103,12 @@
 
 
         <Grid Margin="5,70,5,5" Background="#FF141414">
-            <TextBlock Margin="25,14,503,0" TextWrapping="Wrap" Text="Input Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
+            <TextBlock Margin="26,14,502,0" TextWrapping="Wrap" Text="Input Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
             <TextBox x:Name="txtb_inputpath" Height="20" Margin="25,35,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
             <Button x:Name="btn_inputselect" Content="Select..." Margin="484,35,0,0" Height="20" HorizontalAlignment="Left" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
             <Button x:Name="btn_inputopen" Content="Open" Margin="0,35,25,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputopen_Click" VerticalAlignment="Top"/>
 
-            <TextBlock Margin="25,59,503,0" TextWrapping="Wrap" Text="Output Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
+            <TextBlock Margin="26,59,502,0" TextWrapping="Wrap" Text="Output Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
             <TextBox x:Name="txtb_outputpath" Height="20" Margin="25,80,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
             <Button x:Name="btn_outputselect" Content="Select..." Margin="0,80,92,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
             <Button x:Name="btn_outputopen" Content="Open" Margin="0,80,25,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_outputopen_Click" VerticalAlignment="Top"/>
@@ -124,7 +124,7 @@
                 </TextBox.ToolTip>
             </TextBox>
 
-            <TextBlock Margin="25,169,0,0" TextWrapping="Wrap" Text="Audio Format" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
+            <TextBlock Margin="26,169,0,0" TextWrapping="Wrap" Text="Audio Format" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
 
             <ComboBox x:Name="combo_channels" Margin="25,190,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" HorizontalAlignment="Left" Width="175">
                 <ComboBoxItem Content="No Change"/>
