@@ -1,0 +1,145 @@
+﻿<Window x:Class="BulkAudio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BulkAudio"
+        mc:Ignorable="d"
+        MouseDown="window_MouseDown"
+        Title="BulkAudio" Height="500" Width="650"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
+        Style="{DynamicResource CustomWindowStyle}" Icon="Resources/Icon.ico">
+    <Grid>
+        <Button HorizontalAlignment="Right" Margin="0,5,5,0" VerticalAlignment="Top" Width="20" Height="20" Click="btn_anal_Click">
+            <Button.ToolTip>
+                <ToolTip Background="Black" Foreground="White">
+                    Analyse Loudness and True Peak of an audio file (LUFS &amp; dB)
+                </ToolTip>
+            </Button.ToolTip>
+            <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg212" Width="20" Height="20" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Canvas.RenderTransform>
+                <Canvas.Resources/>
+                <Canvas Name="layer2">
+                    <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="6.6452413" Canvas.Top="4.3774209" Width="6.3288012" Height="11.233622" Name="rect1394" Fill="Transparent"/>
+                </Canvas>
+                <Canvas Name="layer1">
+                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path132" Fill="White" StrokeThickness="0.0314462" Data="M 9.2823047 18.944299 C 8.8555678 18.915263 8.2431141 18.813268 7.7782229 18.693833 4.0607639 17.738774 1.365457 14.534418 1.061293 10.708308 0.97692739 9.647099 1.0585054 8.7241111 1.3274547 7.6956213 1.628118 6.5459892 2.2341846 5.343603 2.9956575 4.3860425 3.2847541 4.0225006 4.0248721 3.2878669 4.4081395 2.9840267 5.1259081 2.4150066 5.9155764 1.9592587 6.7351601 1.6410145 9.0682902 0.73506078 11.683756 0.83883085 13.920622 1.9261024 c 2.138319 1.0393696 3.791084 2.9083314 4.563907 5.1609085 0.582502 1.6978431 0.643453 3.5762011 0.171678 5.2907731 -1.00455 3.650836 -4.222316 6.295361 -7.990536 6.567033 -0.486585 0.03508 -0.8623542 0.03494 -1.3833663 -5.18e-4 z m 2.5314203 -5.360236 v -0.896218 h -0.45597 -0.45597 V 10.439101 8.1903606 l -1.3443262 0.00818 -1.3443259 0.00818 v 0.8962178 0.8962174 l 0.448108 0.00872 0.4481098 0.0087 v 1.335601 1.335601 h -0.4559708 -0.45597 v 0.896217 0.896218 h 1.8081581 1.808157 z M 10.262364 7.2635762 c 0.217434 -0.064574 0.41845 -0.2270974 0.53001 -0.4285246 0.08205 -0.1481434 0.09369 -0.2004102 0.09369 -0.4207274 0 -0.2201087 -0.01167 -0.2726443 -0.09334 -0.4200845 C 10.492942 5.4530022 9.8065954 5.3513462 9.3738525 5.7840882 8.9053518 6.252589 9.0862541 7.0343988 9.7132735 7.2509753 c 0.2043029 0.070571 0.3431665 0.073755 0.5490905 0.012607 z"/>
+                </Canvas>
+            </Canvas>
+
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Background" Value="#00000000"/>
+                    <Setter Property="Foreground" Value="#FFF1F1F1"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.7"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+
+        </Button>
+
+
+
+        <Grid Margin="5,70,5,5" Background="#FF141414">
+            <TextBlock Margin="25,14,503,0" TextWrapping="Wrap" Text="Input Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtb_inputpath" Height="20" Margin="25,35,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
+            <Button x:Name="btn_inputselect" Content="Select..." Margin="484,35,0,0" Height="20" HorizontalAlignment="Left" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
+            <Button x:Name="btn_inputopen" Content="Open" Margin="0,35,25,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputopen_Click" VerticalAlignment="Top"/>
+
+            <TextBlock Margin="25,59,503,0" TextWrapping="Wrap" Text="Output Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtb_outputpath" Height="20" Margin="25,80,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
+            <Button x:Name="btn_outputselect" Content="Select..." Margin="0,80,92,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
+            <Button x:Name="btn_outputopen" Content="Open" Margin="0,80,25,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_outputopen_Click" VerticalAlignment="Top"/>
+
+            <Separator Height="10" Margin="0,110,0,0" VerticalAlignment="Top" Background="#FF323232"/>
+
+            <TextBlock Margin="25,124,0,0" TextWrapping="Wrap" Text="Normalize (LUFS)" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="174"/>
+            <TextBox x:Name="txtb_loudness" Height="20" Margin="25,145,0,0" TextWrapping="Wrap" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" PreviewTextInput="NumberValidationTextBox" PreviewKeyDown="KeyValidationTextBox" HorizontalAlignment="Left" Width="199">
+                <TextBox.ToolTip>
+                    <ToolTip Background="Black" Foreground="White">
+                        Range: -5 to -70
+                    </ToolTip>
+                </TextBox.ToolTip>
+            </TextBox>
+
+            <TextBlock Margin="25,169,0,0" TextWrapping="Wrap" Text="Convert Format" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="174"/>
+
+            <ComboBox x:Name="combo_channels" Margin="25,190,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" HorizontalAlignment="Left" Width="199">
+                <ComboBoxItem Content="No Change"/>
+                <ComboBoxItem Content="WAV"/>
+                <ComboBoxItem Content="MP3"/>
+                <ComboBoxItem Content="FLAC"/>
+                <ComboBoxItem Content="OGG"/>
+            </ComboBox>
+
+            <TextBlock Margin="240,124,220,0" TextWrapping="Wrap" Text="Audio Files" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
+            <Button x:Name="btn_refresh" Margin="0,121,25,0" HorizontalAlignment="Right" Height="20" Width="20" Click="btn_refresh_Click" VerticalAlignment="Top">
+                <StackPanel>
+                    <Image Margin="2">
+                        <Image.Source>
+                            <DrawingImage>
+                                <DrawingImage.Drawing>
+                                    <DrawingGroup ClipGeometry="M0,0 V600 H593 V0 H0 Z">
+                                        <DrawingGroup Opacity="1">
+
+                                            <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M593,600z M0,0z M295.34,0L297.71,0C340.09,0.29 382.43,9.44 420.94,27.2 461.14,45.6 497.1,73.08 525.56,106.9 547.67,84.52 569.74,62.11 591.83,39.71 591.76,110.47 591.83,181.24 591.79,252.01 522.01,252.01 452.23,251.97 382.44,252.03 404.74,229.43 427.1,206.91 449.26,184.18 431.99,161.5 409.75,142.61 384.42,129.51 355.77,114.58 323.28,107.16 290.99,108.11 253.53,108.97 216.45,121.23 185.85,142.84 148.76,168.75 121.39,208.16 110.2,252 73.47,251.98 36.73,252.03 0,251.98L0,251.97C9.38,194.04 36.15,139.06 76.19,96.14 103.62,66.5 137.09,42.44 173.98,26.01 212.01,8.9 253.67,0.24 295.34,0z" />
+                                            <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M593,600z M0,0z M0,348.19C12.31,347.75 24.65,348.12 36.98,348 96.57,347.99 156.16,348.02 215.75,347.99 192.2,371.5 168.71,395.08 145.18,418.61 165.1,443.98 191.51,464.22 221.22,476.79 256.2,491.7 295.66,495.69 332.96,488.39 369.22,481.42 403.26,463.55 429.71,437.8 454.96,413.42 473.26,381.98 482.04,348 518.76,348.01 555.48,347.99 592.2,348.01 588.8,368.19 583.62,388.11 576.21,407.2 548.67,479.89 491.55,540.73 420.75,572.81 381.98,590.73 339.29,599.73 296.62,600L295.42,600C253.74,599.79 212.08,591.1 174.03,574.02 133.61,556.03 97.38,528.87 68.54,495.34 45.67,518.14 23.02,541.16 0,563.81L0,348.19z" />
+                                        </DrawingGroup>
+                                    </DrawingGroup>
+                                </DrawingImage.Drawing>
+                            </DrawingImage>
+                        </Image.Source>
+                    </Image>
+                </StackPanel>
+            </Button>
+            <TextBox x:Name="txtb_audiolist" Height="160" Margin="240,145,25,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="11">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type TextBox}">
+                                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF323232"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelectionActive" Value="true">
+                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF323232"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+
+            <Separator Height="10" Margin="0,315,0,0" VerticalAlignment="Top" Background="#FF323232"/>
+
+            <Button x:Name="btn_run" Content="Process Audio" Margin="0,337,0,0" Height="40" Click="btn_run_Click" HorizontalAlignment="Center" Width="150" VerticalAlignment="Top"/>
+
+
+        </Grid>
+    </Grid>
+</Window>
