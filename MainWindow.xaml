@@ -56,7 +56,7 @@
 
 
 
-        <Button HorizontalAlignment="Right" Margin="0,5,5,0" VerticalAlignment="Top" Width="20" Height="20" Click="btn_anal_Click">
+        <Button HorizontalAlignment="Right" Margin="0,6,6,0" VerticalAlignment="Top" Width="20" Height="20" Click="btn_anal_Click">
             <Button.ToolTip>
                 <ToolTip Background="Black" Foreground="White">
                     Analyse Loudness and True Peak of an audio file (LUFS &amp; dB)
@@ -82,10 +82,10 @@
                     <Setter Property="Foreground" Value="#FFF1F1F1"/>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.6"/>
+                            <Setter Property="Opacity" Value="0.65"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Opacity" Value="0.4"/>
+                            <Setter Property="Opacity" Value="0.45"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
