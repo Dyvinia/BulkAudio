@@ -104,9 +104,9 @@
 
         <Grid Margin="5,70,5,5" Background="#FF141414">
             <TextBlock Margin="26,14,502,0" TextWrapping="Wrap" Text="Input Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
-            <Button x:Name="btn_clearInput" Margin="470,24,0,0" Click="btn_clearInput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Button x:Name="btn_clearInput" Margin="469,23,0,0" Click="btn_clearInput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <Button.ToolTip>
-                    <ToolTip Background="Black" Foreground="White" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
+                    <ToolTip Background="Black" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
                         Clear Input Folder
                     </ToolTip>
                 </Button.ToolTip>
@@ -115,12 +115,13 @@
                         <Setter Property="Cursor" Value="Hand"/>
                         <Setter Property="Background" Value="#00000000"/>
                         <Setter Property="Foreground" Value="#FFF1F1F1"/>
+                        <Setter Property="Opacity" Value="0.8"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.65"/>
+                                <Setter Property="Opacity" Value="0.6"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity" Value="0.45"/>
+                                <Setter Property="Opacity" Value="0.4"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -138,9 +139,9 @@
             <Button x:Name="btn_inputopen" Content="Open" Margin="0,35,25,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputopen_Click" VerticalAlignment="Top"/>
 
             <TextBlock Margin="26,59,502,0" TextWrapping="Wrap" Text="Output Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
-            <Button x:Name="btn_clearOutput" Margin="470,69,0,0" Click="btn_clearOutput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Button x:Name="btn_clearOutput" Margin="469,68,0,0" Click="btn_clearOutput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <Button.ToolTip>
-                    <ToolTip Background="Black" Foreground="White" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
+                    <ToolTip Background="Black" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
                         Clear Output Folder
                     </ToolTip>
                 </Button.ToolTip>
@@ -149,12 +150,13 @@
                         <Setter Property="Cursor" Value="Hand"/>
                         <Setter Property="Background" Value="#00000000"/>
                         <Setter Property="Foreground" Value="#FFF1F1F1"/>
+                        <Setter Property="Opacity" Value="0.8"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.65"/>
+                                <Setter Property="Opacity" Value="0.6"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity" Value="0.45"/>
+                                <Setter Property="Opacity" Value="0.4"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
