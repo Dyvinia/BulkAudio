@@ -52,6 +52,7 @@
                     </DrawingImage>
                 </Image.Source>
             </Image>
+            <Button Name="creditButton" Margin="259,45,25,0" Opacity="0" Click="creditButton_Click"/>
         </Grid>
 
 

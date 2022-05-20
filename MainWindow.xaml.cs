@@ -280,5 +280,9 @@ namespace BulkAudio {
         private void btn_outputopen_Click(object sender, RoutedEventArgs e) {
             Process.Start(outWavDir);
         }
+
+        private void creditButton_Click(object sender, RoutedEventArgs e) {
+            Process.Start("https://dyy.vin/twitter");
+        }
     }
 }
