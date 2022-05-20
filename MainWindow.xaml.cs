@@ -9,9 +9,11 @@ using System.Linq;
 using System.Media;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Xabe.FFmpeg.Downloader;
 
 namespace BulkAudio {
 
@@ -39,15 +41,11 @@ namespace BulkAudio {
 
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input");
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
+
             if (File.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe")) {
                 FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
             }
-            else {
-                string title = "Missing Dependencies";
-                string message = "FFmpeg not found in tools folder";
-                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-            }
+
             if (Directory.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input")) {
                 inpWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input";
             }
@@ -184,7 +182,7 @@ namespace BulkAudio {
             fillInputAudioList();
             if (FFmpegDir != null & inpWavDir != "" & outWavDir != "") {
                 Mouse.OverrideCursor = Cursors.Wait;
-                string saveArgs = null;
+                string logString = null;
                 foreach (FileListItem soundInput in fileList) {
                     string outFile = soundInput.Path.Replace(inpWavDir, outWavDir);
                     if (combo_channels.SelectedIndex == 1) outFile = Path.ChangeExtension(outFile, ".wav");
@@ -208,7 +206,7 @@ namespace BulkAudio {
 
                         if (txtb_loudness.Text != "" && (Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
                             ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
-                            saveArgs += "> ffmpeg " + ffmpeg.StartInfo.Arguments + "\r\n";
+                            logString += "> ffmpeg " + ffmpeg.StartInfo.Arguments + "\r\n";
                             ffmpeg.Start();
                             string output = ffmpeg.StandardError.ReadToEnd();
                             ffmpeg.WaitForExit();
@@ -227,7 +225,7 @@ namespace BulkAudio {
                         }
 
                         ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" " + segmentvol + remix + "\"" + outFile + "\"";
-                        saveArgs += "> ffmpeg" + ffmpeg.StartInfo.Arguments + "\r\n";
+                        logString += "> ffmpeg" + ffmpeg.StartInfo.Arguments + "\r\n";
                         ffmpeg.Start();
                         ffmpeg.WaitForExit();
 
@@ -235,7 +233,7 @@ namespace BulkAudio {
                     }
 
                     //Save output
-                    File.WriteAllText(Path.GetDirectoryName(FFmpegDir) + "\\log.txt", saveArgs);
+                    File.WriteAllText(Path.GetDirectoryName(FFmpegDir) + "\\log.txt", logString);
                 }
 
                 Mouse.OverrideCursor = null;
