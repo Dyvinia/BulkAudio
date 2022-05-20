@@ -55,8 +55,6 @@
             <Button Name="creditButton" Margin="259,45,25,0" Opacity="0" Click="creditButton_Click"/>
         </Grid>
 
-
-
         <Button HorizontalAlignment="Right" Margin="0,6,6,0" VerticalAlignment="Top" Width="20" Height="20" Click="btn_anal_Click" ToolTip="Analyse Loudness and True Peak of an audio file (LUFS &amp; dB)">
             <Image Source="Resources/info20.png"/>
             <Button.Style>
