@@ -10,9 +10,16 @@ using System.Media;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace BulkAudio {
+
+    public class FileListItem {
+        public string Name { get; set; }
+        public string Path { get; set; }
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -20,13 +27,15 @@ namespace BulkAudio {
         public static string FFmpegDir = null;
         public string inpWavDir;
         public string outWavDir;
-        List<string> filesToConvert = new List<string>();
+        List<FileListItem> fileList = new List<FileListItem>();
 
         public MainWindow() {
             InitializeComponent();
 
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
             txt_Version.Text = "v" + version;
+
+            audioListBox.ItemsSource = fileList;
 
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input");
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
@@ -51,13 +60,13 @@ namespace BulkAudio {
 
         public void fillInputAudioList() {
             Mouse.OverrideCursor = Cursors.Wait;
+            fileList.Clear();
             txtb_inputpath.Text = inpWavDir;
             txtb_outputpath.Text = outWavDir;
             var ext = new List<string> { "wav", "mp3", "ogg", "flac", "m4a" };
-            filesToConvert = Directory.EnumerateFiles(inpWavDir, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s).TrimStart('.').ToLowerInvariant())).ToList();
-            txtb_audiolist.Text = "";
-            foreach (string file in filesToConvert) {
-                txtb_audiolist.Text += Path.GetFileNameWithoutExtension(inpWavDir) + file.Remove(0, inpWavDir.Length) + "\r\n";
+            string[] files = Directory.EnumerateFiles(inpWavDir, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s).TrimStart('.').ToLowerInvariant())).ToArray();
+            foreach (string file in files) {
+                fileList.Add(new FileListItem { Name = Path.GetFileNameWithoutExtension(inpWavDir) + file.Remove(0, inpWavDir.Length), Path = file });
             }
             Mouse.OverrideCursor = null;
         }
@@ -182,9 +191,8 @@ namespace BulkAudio {
             if (FFmpegDir != null & inpWavDir != "" & outWavDir != "") {
                 Mouse.OverrideCursor = Cursors.Wait;
                 string saveArgs = null;
-                foreach (string soundInput in filesToConvert) {
-                    string outFile = null;
-                    outFile = soundInput.Replace(inpWavDir, outWavDir);
+                foreach (FileListItem soundInput in fileList) {
+                    string outFile = soundInput.Path.Replace(inpWavDir, outWavDir);
                     if (combo_channels.SelectedIndex == 1) outFile = Path.ChangeExtension(outFile, ".wav");
                     if (combo_channels.SelectedIndex == 2) outFile = Path.ChangeExtension(outFile, ".mp3");
                     if (combo_channels.SelectedIndex == 3) outFile = Path.ChangeExtension(outFile, ".flac");
@@ -252,6 +260,14 @@ namespace BulkAudio {
             Keyboard.ClearFocus();
         }
 
+        private void playAudio_Click(object sender, RoutedEventArgs e) {
+            FileListItem file = ((Button)sender).DataContext as FileListItem;
+            Process.Start(file.Path);
+        }
 
+        private void openAudioFolder_Click(object sender, RoutedEventArgs e) {
+            FileListItem file = ((Button)sender).DataContext as FileListItem;
+            Process.Start(new ProcessStartInfo("explorer.exe", " /select, " + file.Path));
+        }
     }
 }

@@ -1361,8 +1361,8 @@
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ControlMouseOverBackground}"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ControlMouseOverBorderBrush}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="#553F3F3F"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="#553F3F3F"/>
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -3925,7 +3925,7 @@
 
     <!-- Tooltip -->
     <Style TargetType="{x:Type ToolTip}">
-        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}"/>
+        <Setter Property="Background" Value="Black"/>
         <Setter Property="BorderBrush" Value="{StaticResource ControlDefaultBorderBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
         <Setter Property="MaxWidth" Value="800"/>

@@ -176,13 +176,23 @@
             <Separator Height="10" Margin="0,110,0,0" VerticalAlignment="Top" Background="#FF323232"/>
 
             <TextBlock Margin="25,124,0,0" TextWrapping="Wrap" Text="Normalize (LUFS)" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
-            <TextBox x:Name="txtb_loudness" Height="20" Margin="25,145,0,0" TextWrapping="Wrap" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" PreviewTextInput="NumberValidationTextBox" PreviewKeyDown="KeyValidationTextBox" HorizontalAlignment="Left" Width="175">
-                <TextBox.ToolTip>
-                    <ToolTip Background="Black" Foreground="White">
-                        Range: -5 to -70
-                    </ToolTip>
-                </TextBox.ToolTip>
-            </TextBox>
+
+            <Grid Height="20" Width="175" Margin="25,145,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBox x:Name="txtb_loudness" TextWrapping="Wrap" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" PreviewTextInput="NumberValidationTextBox" PreviewKeyDown="KeyValidationTextBox" ToolTip="Range: -5 to -70" />
+
+                <TextBlock IsHitTestVisible="False" Text="No Change" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,0,0,0" Foreground="#FFF1F1F1" Opacity="0.25">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=txtb_loudness}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
             <TextBlock Margin="26,169,0,0" TextWrapping="Wrap" Text="Audio Format" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
 
@@ -245,7 +255,76 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <TextBox x:Name="txtb_audiolist" Height="160" Margin="215,145,25,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="11">
+            <ListBox x:Name="audioListBox" Height="160" Width="398" Margin="215,145,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="2"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="4"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                            <Button x:Name="openAudioFolder" Grid.Column="1" Click="openAudioFolder_Click" ToolTip="Opens Folder" Background="Transparent">
+                                <Image Source="Resources/folder.png" Margin="-1"/>
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="0.6"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Opacity" Value="0.4"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button x:Name="playAudio" Grid.Column="3" Click="playAudio_Click" ToolTip="Plays Audio File">
+                                <Image Source="Resources/play.png" Margin="-1"/>
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                        <Setter Property="Background" Value="#00000000"/>
+                                        <Setter Property="Foreground" Value="#FFF1F1F1"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="0.6"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Opacity" Value="0.4"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Setter Property="Focusable" Value="False"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <TextBox x:Name="txtb_audiolist" Height="160" Margin="215,145,25,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="11" Visibility="Collapsed">
                 <TextBox.Resources>
                     <Style TargetType="{x:Type TextBox}">
                         <Setter Property="Template">
