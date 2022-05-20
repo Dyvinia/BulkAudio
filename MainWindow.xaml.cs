@@ -56,9 +56,8 @@ namespace BulkAudio {
             var ext = new List<string> { "wav", "mp3", "ogg", "flac", "m4a" };
             string[] files = Directory.EnumerateFiles(inpWavDir, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s).TrimStart('.').ToLowerInvariant())).ToArray();
 
-            foreach (string file in files) {
+            foreach (string file in files)
                 fileList.Add(new FileListItem { Name = Path.GetFileNameWithoutExtension(inpWavDir) + file.Remove(0, inpWavDir.Length), Path = file });
-            }
 
             Mouse.OverrideCursor = null;
         }
