@@ -14,7 +14,7 @@ A tool to process/convert multiple audio files at once
 - Download latest release
 - Move BulkAudio.exe to new folder
 - Launch BulkAudio
-- Place wav/mp3/ogg/flac/m4a files in `Input` folder
+- Place wav/mp3/ogg/flac/m4a files in the `Input` folder
 - Change settings and process
 
 ## Credits
