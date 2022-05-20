@@ -203,9 +203,9 @@
 
 
             <TextBlock Margin="216,124,221,0" TextWrapping="Wrap" Text="Audio Files" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
-            <Button x:Name="btn_refresh" Margin="0,121,25,0" HorizontalAlignment="Right" Height="20" Width="20" Click="btn_refresh_Click" VerticalAlignment="Top">
+            <Button x:Name="btn_refresh" Margin="0,123,24,0" HorizontalAlignment="Right" Height="20" Width="20" Click="btn_refresh_Click" VerticalAlignment="Top">
                 <StackPanel>
-                    <Image Margin="2">
+                    <Image Margin="3">
                         <Image.Source>
                             <DrawingImage>
                                 <DrawingImage.Drawing>
@@ -221,6 +221,29 @@
                         </Image.Source>
                     </Image>
                 </StackPanel>
+
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Background" Value="#00000000"/>
+                        <Setter Property="Foreground" Value="#FFF1F1F1"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
             <TextBox x:Name="txtb_audiolist" Height="160" Margin="215,145,25,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="11">
                 <TextBox.Resources>

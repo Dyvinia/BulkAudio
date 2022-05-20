@@ -2208,8 +2208,8 @@
         <Setter Property="BorderBrush" Value="{StaticResource ControlDefaultBorderBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ControlBrightDefaultBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1,0"/>
-        <Setter Property="Width" Value="20"/>
-        <Setter Property="MinWidth" Value="20"/>
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="MinWidth" Value="16"/>
         <Setter Property="Margin" Value="-1"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -2225,7 +2225,7 @@
                                         Command="{x:Static ScrollBar.LineUpCommand}" 
                                         BorderThickness="1 1 1 0">
                             <Path x:Name="ArrowTop" Data="M 0,4 C0,4 0,6 0,6 0,6 3.5,2.5 3.5,2.5 3.5,2.5 7,6 7,6 7,6 7,4 7,4 7,4 3.5,0.5 3.5,0.5 3.5,0.5 0,4 0,4 z"
-                                  Fill="{StaticResource ControlGlythColour}" Margin="2,5,3,4" Stretch="Uniform"/>
+                                  Fill="{StaticResource ControlGlythColour}" Margin="3,4,3,4" Stretch="Uniform"/>
                         </Button>
                         <Border BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="1 0 1 0" 
@@ -2250,7 +2250,7 @@
                                         Grid.Row="2">
                             <Path x:Name="ArrowBottom"
                                   Data="M 0,2.5 C0,2.5 0,0.5 0,0.5 0,0.5 3.5,4 3.5,4 3.5,4 7,0.5 7,0.5 7,0.5 7,2.5 7,2.5 7,2.5 3.5,6 3.5,6 3.5,6 0,2.5 0,2.5 z" 
-                                  Fill="{StaticResource ControlGlythColour}" Margin="2,5,3,4" Stretch="Uniform"/>
+                                  Fill="{StaticResource ControlGlythColour}" Margin="3,4,3,4" Stretch="Uniform"/>
                         </Button>
                         
                     </Grid>
@@ -2584,7 +2584,8 @@
     <Style x:Key="ScrollBarThumbVertical" TargetType="{x:Type Thumb}">
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="Background" Value="{StaticResource ControlBrightDefaultBackground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource ControlBrightDefaultBorderBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ContainerBackground}"/>
+        <Setter Property="Margin" Value="1"/>
         <Setter Property="IsTabStop" Value="false"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -2595,11 +2596,11 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Fill" TargetName="rectangle" Value="{StaticResource ControlMouseOverBackground}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ControlMouseOverBorderBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ContainerBackground}"/>
                         </Trigger>
                         <Trigger Property="IsDragging" Value="true">
                             <Setter Property="Fill" TargetName="rectangle" Value="{StaticResource ControlBrightDefaultBackground}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource ControlBrightDefaultBackground}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ContainerBackground}"/>
                             <Setter Property="Foreground" Value="{StaticResource ControlBrightDefaultBorderBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

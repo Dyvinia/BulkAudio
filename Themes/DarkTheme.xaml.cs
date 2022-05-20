@@ -21,10 +21,7 @@ namespace BulkAudio.Themes
         }
 
         public void CloseWind(Window window) {
-            if (window.Title == "BulkAudio") {
-                Application.Current.Shutdown();
-            }
-            else window.Hide();
+            Application.Current.Shutdown();
         }
 
         public void MaximizeRestore(Window window)
