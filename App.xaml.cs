@@ -17,7 +17,7 @@ namespace BulkAudio {
     public partial class App : Application {
 
         public App() {
-            //DispatcherUnhandledException += Application_DispatcherUnhandledException;
+            DispatcherUnhandledException += Application_DispatcherUnhandledException;
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
@@ -32,11 +32,8 @@ namespace BulkAudio {
 
         protected override async void OnStartup(StartupEventArgs e) {
             MainWindow = new MainWindow();
-
-            if (!File.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe")) {
+            if (!File.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe"))
                 await ShowPopup(new DownloadWindow());
-            }
-
             MainWindow.Show();
         }
 

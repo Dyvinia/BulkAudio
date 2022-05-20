@@ -33,7 +33,16 @@ namespace BulkAudio {
         }
 
         public async void Download(IProgress<ProgressInfo> progress) {
-            await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\", progress);
+            try {
+                await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\", progress);
+                File.Delete(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffprobe.exe");
+                File.Delete(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\version.json");
+            }
+            catch (Exception e) {
+                string message = "Unable to Download FFmpeg to \\tools\\ffmpeg.exe" + Environment.NewLine + e.Message;
+                if (e.InnerException != null) message += Environment.NewLine + e.InnerException.Message;
+                MessageBox.Show(message, "BulkAudio", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             this.Close();
         }
     }
