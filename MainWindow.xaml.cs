@@ -38,14 +38,11 @@ namespace BulkAudio {
             audioListBox.ItemsSource = fileList;
 
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input");
+            inpWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input";
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
+            outWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output";
 
-            if (File.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe"))
-                FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
-            if (Directory.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input"))
-                inpWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input";
-            if (Directory.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output"))
-                outWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output";
+            FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
 
             fillInputAudioList();
         }
