@@ -29,10 +29,10 @@ namespace BulkAudio {
                 pbStatus.Value = report.DownloadedBytes;
                 pbStatus.Maximum = report.TotalBytes;
             });
-            Download(progress);
+            DownloadFFmpeg(progress);
         }
 
-        public async void Download(IProgress<ProgressInfo> progress) {
+        public async void DownloadFFmpeg(IProgress<ProgressInfo> progress) {
             try {
                 await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\", progress);
                 File.Delete(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffprobe.exe");

@@ -14,7 +14,7 @@
         Title="DownloadWindow" Height="100" Width="400">
     <Grid Background="#FF2D2D2D">
         <Grid Margin="5,5,5,5" Background="#FF141414">
-            <TextBlock Text="Downloading FFmpeg" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Downloading FFmpeg" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <ProgressBar Name="pbStatus" Height="16" VerticalAlignment="Bottom" Background="Transparent" Foreground="White" BorderThickness="0"/>
         </Grid>
     </Grid>

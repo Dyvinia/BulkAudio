@@ -9,11 +9,9 @@ using System.Linq;
 using System.Media;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Xabe.FFmpeg.Downloader;
 
 namespace BulkAudio {
 
@@ -42,16 +40,12 @@ namespace BulkAudio {
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input");
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
 
-            if (File.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe")) {
+            if (File.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe"))
                 FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
-            }
-
-            if (Directory.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input")) {
+            if (Directory.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input"))
                 inpWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input";
-            }
-            if (Directory.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output")) {
+            if (Directory.Exists(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output"))
                 outWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output";
-            }
 
             fillInputAudioList();
         }
@@ -157,7 +151,6 @@ namespace BulkAudio {
                 string title = "Loudness";
                 string message = "Loudness:" + Environment.NewLine + lufs + "LUFS" + Environment.NewLine + Environment.NewLine + "True Peak:" + Environment.NewLine + truepeak + "dB";
                 MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
-
             }
         }
 
