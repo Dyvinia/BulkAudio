@@ -106,14 +106,6 @@ namespace BulkAudio {
             fillInputAudioList();
         }
 
-        private void btn_inputopen_Click(object sender, RoutedEventArgs e) {
-            Process.Start(inpWavDir);
-        }
-
-        private void btn_outputopen_Click(object sender, RoutedEventArgs e) {
-            Process.Start(outWavDir);
-        }
-
         private void btn_clearInput_Click (object sender, RoutedEventArgs e) {
             string message = "Delete Contents of Input Folder?" + Environment.NewLine + "This action is not reversible.";
             string title = "Delete Contents";
@@ -144,8 +136,31 @@ namespace BulkAudio {
             }
         }
 
-        private void btn_refresh_Click(object sender, RoutedEventArgs e) {
-            fillInputAudioList();
+        public void analyzeAudio(string filePath) {
+            using (Process ffmpeg = new Process()) {
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                ffmpeg.StartInfo.FileName = MainWindow.FFmpegDir;
+                ffmpeg.StartInfo.CreateNoWindow = true;
+                ffmpeg.StartInfo.Arguments = "-y -i \"" + filePath + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
+                ffmpeg.StartInfo.UseShellExecute = false;
+                ffmpeg.StartInfo.RedirectStandardError = true;
+                ffmpeg.Start();
+                string output = ffmpeg.StandardError.ReadToEnd();
+                ffmpeg.WaitForExit();
+
+                string ffmpegjson = output.Substring(output.IndexOf('{'));
+                dynamic results = JsonConvert.DeserializeObject<dynamic>(ffmpegjson);
+                string lufs = results.input_i;
+                string truepeak = results.input_tp;
+
+                Mouse.OverrideCursor = null;
+
+                string title = "Loudness";
+                string message = "Loudness:" + Environment.NewLine + lufs + "LUFS" + Environment.NewLine + Environment.NewLine + "True Peak:" + Environment.NewLine + truepeak + "dB";
+                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
         }
 
         private void btn_anal_Click(object sender, RoutedEventArgs e) {
@@ -158,32 +173,7 @@ namespace BulkAudio {
                 Nullable<bool> result = openFileDlg.ShowDialog();
 
                 if (result == true) {
-                    Mouse.OverrideCursor = Cursors.Wait;
-                    using (Process ffmpeg = new Process()) {
-                        ffmpeg.StartInfo.FileName = MainWindow.FFmpegDir;
-                        ffmpeg.StartInfo.CreateNoWindow = true;
-                        ffmpeg.StartInfo.Arguments = "-y -i \"" + openFileDlg.FileName + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
-                        ffmpeg.StartInfo.UseShellExecute = false;
-                        ffmpeg.StartInfo.RedirectStandardError = true;
-                        ffmpeg.Start();
-                        string output = ffmpeg.StandardError.ReadToEnd();
-                        ffmpeg.WaitForExit();
-
-                        //if (MainWindow.saveanaloutput == true) File.WriteAllText(Path.GetDirectoryName(MainWindow.FFmpegDir) + "\\analysis_output.txt", output);
-
-                        string ffmpegjson = output.Substring(output.IndexOf('{'));
-                        dynamic results = JsonConvert.DeserializeObject<dynamic>(ffmpegjson);
-                        string lufs = results.input_i;
-                        string truepeak = results.input_tp;
-
-                        Mouse.OverrideCursor = null;
-
-                        string title = "Loudness";
-                        string message = "Loudness:" + Environment.NewLine + lufs + "LUFS" + Environment.NewLine + Environment.NewLine + "True Peak:" + Environment.NewLine + truepeak + "dB";
-                        MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    }
-
+                    analyzeAudio(openFileDlg.FileName);
                 }
             }
         }
@@ -272,6 +262,23 @@ namespace BulkAudio {
         private void openAudioFolder_Click(object sender, RoutedEventArgs e) {
             FileListItem file = ((Button)sender).DataContext as FileListItem;
             Process.Start(new ProcessStartInfo("explorer.exe", " /select, " + file.Path));
+        }
+
+        private void analyzeAudio_Click(object sender, RoutedEventArgs e) {
+            FileListItem file = ((Button)sender).DataContext as FileListItem;
+            analyzeAudio(file.Path);
+        }
+
+        private void btn_refresh_Click(object sender, RoutedEventArgs e) {
+            fillInputAudioList();
+        }
+
+        private void btn_inputopen_Click(object sender, RoutedEventArgs e) {
+            Process.Start(inpWavDir);
+        }
+
+        private void btn_outputopen_Click(object sender, RoutedEventArgs e) {
+            Process.Start(outWavDir);
         }
     }
 }
