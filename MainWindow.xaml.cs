@@ -24,7 +24,7 @@ namespace BulkAudio {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        public static string FFmpegDir = null;
+        public static string FFmpegDir;
         public string inpWavDir;
         public string outWavDir;
         List<FileListItem> fileList = new List<FileListItem>();
@@ -37,12 +37,11 @@ namespace BulkAudio {
 
             audioListBox.ItemsSource = fileList;
 
+            FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input");
             inpWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input";
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
             outWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output";
-
-            FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
 
             fillInputAudioList();
         }
