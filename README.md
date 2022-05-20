@@ -1,5 +1,5 @@
 # BulkAudio
-A tool to process multiple audio files at once
+A tool to process/convert multiple audio files at once
 
 #### [Download the latest release here](https://github.com/Dyvinia/BulkAudio/releases)
 ![image](https://i.imgur.com/sGEgAGK.png)
