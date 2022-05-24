@@ -129,7 +129,7 @@ namespace BulkAudio {
 
                 ffmpeg.StartInfo.FileName = MainWindow.FFmpegDir;
                 ffmpeg.StartInfo.CreateNoWindow = true;
-                ffmpeg.StartInfo.Arguments = "-y -i \"" + filePath + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
+                ffmpeg.StartInfo.Arguments = $"-y -i \"{filePath}\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
                 ffmpeg.StartInfo.UseShellExecute = false;
                 ffmpeg.StartInfo.RedirectStandardError = true;
                 ffmpeg.Start();
@@ -193,8 +193,8 @@ namespace BulkAudio {
                         string segmentvol = "";
 
                         if (txtb_loudness.Text != "" && (Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
-                            ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput.Path + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
-                            logString += "> ffmpeg " + ffmpeg.StartInfo.Arguments + "\r\n";
+                            ffmpeg.StartInfo.Arguments = $"-y -i \"{soundInput.Path}\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
+                            logString += $"> ffmpeg {ffmpeg.StartInfo.Arguments}\r\n";
                             ffmpeg.Start();
                             string output = ffmpeg.StandardError.ReadToEnd();
                             ffmpeg.WaitForExit();
@@ -203,7 +203,7 @@ namespace BulkAudio {
                             dynamic results = JsonConvert.DeserializeObject<dynamic>(ffmpegjson);
                             float lufs = (float)results.input_i;
                             string volume = (Math.Pow(10, (-(lufs - (Convert.ToInt32(txtb_loudness.Text))) / 20))).ToString();
-                            segmentvol = "-af \"volume = " + volume + "\" ";
+                            segmentvol = $"-af \"volume = {volume}\" ";
                         }
 
                         else if (txtb_loudness.Text != "" && !(Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
@@ -212,12 +212,10 @@ namespace BulkAudio {
                             return;
                         }
 
-                        ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput.Path + "\" " + segmentvol + remix + "\"" + outFile + "\"";
-                        logString += "> ffmpeg" + ffmpeg.StartInfo.Arguments + "\r\n";
+                        ffmpeg.StartInfo.Arguments = $"-y -i \"{soundInput.Path}\" {segmentvol}{remix}\"{outFile}\"";
+                        logString += $"> ffmpeg {ffmpeg.StartInfo.Arguments}\r\n";
                         ffmpeg.Start();
                         ffmpeg.WaitForExit();
-
-
                     }
 
                     //Save output
