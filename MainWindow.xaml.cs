@@ -193,7 +193,7 @@ namespace BulkAudio {
                         string segmentvol = "";
 
                         if (txtb_loudness.Text != "" && (Convert.ToInt32(txtb_loudness.Text) > -71 & Convert.ToInt32(txtb_loudness.Text) < -4)) {
-                            ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
+                            ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput.Path + "\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
                             logString += "> ffmpeg " + ffmpeg.StartInfo.Arguments + "\r\n";
                             ffmpeg.Start();
                             string output = ffmpeg.StandardError.ReadToEnd();
@@ -212,7 +212,7 @@ namespace BulkAudio {
                             return;
                         }
 
-                        ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput + "\" " + segmentvol + remix + "\"" + outFile + "\"";
+                        ffmpeg.StartInfo.Arguments = "-y -i \"" + soundInput.Path + "\" " + segmentvol + remix + "\"" + outFile + "\"";
                         logString += "> ffmpeg" + ffmpeg.StartInfo.Arguments + "\r\n";
                         ffmpeg.Start();
                         ffmpeg.WaitForExit();
