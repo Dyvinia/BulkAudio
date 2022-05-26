@@ -3,6 +3,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,40 +15,29 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace BulkAudio {
-
-    public class FileListItem {
-        public string Name { get; set; }
-        public string Path { get; set; }
-    }
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        public static string FFmpegDir;
-        public string inpWavDir;
-        public string outWavDir;
-        List<FileListItem> fileList = new List<FileListItem>();
+
+        public class FileListItem {
+            public string Name { get; set; }
+            public string Path { get; set; }
+        }
+        public ObservableCollection<FileListItem> FileList = new ObservableCollection<FileListItem>();
+
 
         public MainWindow() {
             InitializeComponent();
 
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
-            txt_Version.Text = "v" + version;
-
             MouseDown += (s, e) => FocusManager.SetFocusedElement(this, this);
             btn_refresh.Click += (s, e) => fillInputAudioList();
-            btn_inputopen.Click += (s, e) => Process.Start(inpWavDir);
-            btn_outputopen.Click += (s, e) => Process.Start(outWavDir);
+            btn_inputopen.Click += (s, e) => Process.Start(App.InpWavDir);
+            btn_outputopen.Click += (s, e) => Process.Start(App.OutWavDir);
             creditButton.Click += (s, e) => Process.Start("https://dyy.vin/twitter");
 
-            audioListBox.ItemsSource = fileList;
-
-            FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
-            Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input");
-            inpWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Input";
-            Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
-            outWavDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output";
+            audioListBox.ItemsSource = FileList;
+            txt_Version.Text = App.Version;
 
             fillInputAudioList();
         }
@@ -55,15 +45,15 @@ namespace BulkAudio {
         public void fillInputAudioList() {
             Mouse.OverrideCursor = Cursors.Wait;
 
-            fileList.Clear();
-            txtb_inputpath.Text = inpWavDir;
-            txtb_outputpath.Text = outWavDir;
+            FileList.Clear();
+            txtb_inputpath.Text = App.InpWavDir;
+            txtb_outputpath.Text = App.OutWavDir;
 
             var ext = new List<string> { "wav", "mp3", "ogg", "flac", "m4a" };
-            string[] files = Directory.EnumerateFiles(inpWavDir, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s).TrimStart('.').ToLowerInvariant())).ToArray();
+            string[] files = Directory.EnumerateFiles(App.InpWavDir, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s).TrimStart('.').ToLowerInvariant())).ToArray();
 
             foreach (string file in files)
-                fileList.Add(new FileListItem { Name = Path.GetFileNameWithoutExtension(inpWavDir) + file.Remove(0, inpWavDir.Length), Path = file });
+                FileList.Add(new FileListItem { Name = Path.GetFileNameWithoutExtension(App.InpWavDir) + file.Remove(0, App.InpWavDir.Length), Path = file });
 
             Mouse.OverrideCursor = null;
         }
@@ -74,7 +64,8 @@ namespace BulkAudio {
         }
 
         private void KeyValidationTextBox(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Space) e.Handled = true;
+            if (e.Key == Key.Space) 
+                e.Handled = true;
         }
 
         private void btn_inputselect_Click(object sender, RoutedEventArgs e) {
@@ -83,7 +74,7 @@ namespace BulkAudio {
             dialog.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok) {
-                inpWavDir = dialog.FileName;
+                App.InpWavDir = dialog.FileName;
             }
             fillInputAudioList();
         }
@@ -94,7 +85,7 @@ namespace BulkAudio {
             dialog.InitialDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok) {
-                outWavDir = dialog.FileName;
+                App.OutWavDir = dialog.FileName;
             }
             fillInputAudioList();
         }
@@ -107,8 +98,8 @@ namespace BulkAudio {
             MessageBoxResult result = MessageBox.Show(message, title, buttons, icon);
             switch (result) {
                 case MessageBoxResult.Yes:
-                    Directory.Delete(inpWavDir, true);
-                    Directory.CreateDirectory(inpWavDir);
+                    Directory.Delete(App.InpWavDir, true);
+                    Directory.CreateDirectory(App.InpWavDir);
                     fillInputAudioList();
                     break;
             }
@@ -122,8 +113,8 @@ namespace BulkAudio {
             MessageBoxResult result = MessageBox.Show(message, title, buttons, icon);
             switch (result) {
                 case MessageBoxResult.Yes:
-                    Directory.Delete(outWavDir, true);
-                    Directory.CreateDirectory(outWavDir);
+                    Directory.Delete(App.OutWavDir, true);
+                    Directory.CreateDirectory(App.OutWavDir);
                     fillInputAudioList();
                     break;
             }
@@ -133,7 +124,7 @@ namespace BulkAudio {
             using (Process ffmpeg = new Process()) {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                ffmpeg.StartInfo.FileName = MainWindow.FFmpegDir;
+                ffmpeg.StartInfo.FileName = App.FFmpegDir;
                 ffmpeg.StartInfo.CreateNoWindow = true;
                 ffmpeg.StartInfo.Arguments = $"-y -i \"{filePath}\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
                 ffmpeg.StartInfo.UseShellExecute = false;
@@ -174,11 +165,11 @@ namespace BulkAudio {
         private void btn_run_Click(object sender, RoutedEventArgs e) {
             Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Output");
             fillInputAudioList();
-            if (FFmpegDir != null & inpWavDir != "" & outWavDir != "") {
+            if (App.FFmpegDir != null & App.InpWavDir != "" & App.OutWavDir != "") {
                 Mouse.OverrideCursor = Cursors.Wait;
                 string logString = null;
-                foreach (FileListItem soundInput in fileList) {
-                    string outFile = soundInput.Path.Replace(inpWavDir, outWavDir);
+                foreach (FileListItem soundInput in FileList) {
+                    string outFile = soundInput.Path.Replace(App.InpWavDir, App.OutWavDir);
                     if (combo_channels.SelectedIndex == 1) outFile = Path.ChangeExtension(outFile, ".wav");
                     if (combo_channels.SelectedIndex == 2) outFile = Path.ChangeExtension(outFile, ".mp3");
                     if (combo_channels.SelectedIndex == 3) outFile = Path.ChangeExtension(outFile, ".flac");
@@ -192,7 +183,7 @@ namespace BulkAudio {
 
                     //FFMpeg
                     using (Process ffmpeg = new Process()) {
-                        ffmpeg.StartInfo.FileName = FFmpegDir;
+                        ffmpeg.StartInfo.FileName = App.FFmpegDir;
                         ffmpeg.StartInfo.CreateNoWindow = true;
                         ffmpeg.StartInfo.UseShellExecute = false;
                         ffmpeg.StartInfo.RedirectStandardError = true;
@@ -225,7 +216,7 @@ namespace BulkAudio {
                     }
 
                     //Save output
-                    File.WriteAllText(Path.GetDirectoryName(FFmpegDir) + "\\log.txt", logString);
+                    File.WriteAllText(Path.GetDirectoryName(App.FFmpegDir) + "\\log.txt", logString);
                 }
 
                 Mouse.OverrideCursor = null;
@@ -235,7 +226,7 @@ namespace BulkAudio {
                 MessageBoxButton buttons = MessageBoxButton.YesNo;
                 MessageBoxImage icon = MessageBoxImage.Information;
                 MessageBoxResult result = MessageBox.Show(message, title, buttons, icon);
-                if (result == MessageBoxResult.Yes) Process.Start(outWavDir);
+                if (result == MessageBoxResult.Yes) Process.Start(App.OutWavDir);
             }
         }
 

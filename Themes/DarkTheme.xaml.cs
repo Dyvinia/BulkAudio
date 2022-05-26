@@ -21,7 +21,7 @@ namespace BulkAudio.Themes
         }
 
         public void CloseWind(Window window) {
-            Application.Current.Shutdown();
+            window.Close();
         }
 
         public void MaximizeRestore(Window window)
@@ -33,11 +33,11 @@ namespace BulkAudio.Themes
             else if (window.WindowState == WindowState.Normal) {
                 window.WindowState = WindowState.Maximized;
             }
-                
+
         }
 
-        public const string WrapperGridName = "WrapperGrid";
-
         public void MinimizeWind(Window window) => window.WindowState = WindowState.Minimized;
+
+        public const string WrapperGridName = "WrapperGrid";
     }
 }

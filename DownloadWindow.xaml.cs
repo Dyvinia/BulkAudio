@@ -20,7 +20,6 @@ namespace BulkAudio {
     /// Interaction logic for DownloadWindow.xaml
     /// </summary>
     public partial class DownloadWindow : Window {
-        
 
         public DownloadWindow() {
             InitializeComponent();
@@ -34,12 +33,12 @@ namespace BulkAudio {
 
         public async void DownloadFFmpeg(IProgress<ProgressInfo> progress) {
             try {
-                await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\", progress);
-                File.Delete(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffprobe.exe");
-                File.Delete(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\version.json");
+                await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, App.BaseDir + "Utils\\", progress);
+                File.Delete(App.BaseDir + "Utils\\ffprobe.exe");
+                File.Delete(App.BaseDir + "Utils\\version.json");
             }
             catch (Exception e) {
-                string message = "Unable to Download FFmpeg to \\tools\\ffmpeg.exe" + Environment.NewLine + e.Message;
+                string message = "Unable to Download FFmpeg to \\Utils\\ffmpeg.exe" + Environment.NewLine + e.Message;
                 if (e.InnerException != null) message += Environment.NewLine + e.InnerException.Message;
                 MessageBox.Show(message, "BulkAudio", MessageBoxButton.OK, MessageBoxImage.Error);
             }
