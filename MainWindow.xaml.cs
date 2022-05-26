@@ -35,6 +35,12 @@ namespace BulkAudio {
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
             txt_Version.Text = "v" + version;
 
+            MouseDown += (s, e) => FocusManager.SetFocusedElement(this, this);
+            btn_refresh.Click += (s, e) => fillInputAudioList();
+            btn_inputopen.Click += (s, e) => Process.Start(inpWavDir);
+            btn_outputopen.Click += (s, e) => Process.Start(outWavDir);
+            creditButton.Click += (s, e) => Process.Start("https://dyy.vin/twitter");
+
             audioListBox.ItemsSource = fileList;
 
             FFmpegDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\tools\\ffmpeg.exe";
@@ -233,11 +239,6 @@ namespace BulkAudio {
             }
         }
 
-
-        private void window_MouseDown(object sender, MouseButtonEventArgs e) {
-            Keyboard.ClearFocus();
-        }
-
         private void playAudio_Click(object sender, RoutedEventArgs e) {
             FileListItem file = ((Button)sender).DataContext as FileListItem;
             Process.Start(file.Path);
@@ -251,22 +252,6 @@ namespace BulkAudio {
         private void analyzeAudio_Click(object sender, RoutedEventArgs e) {
             FileListItem file = ((Button)sender).DataContext as FileListItem;
             analyzeAudio(file.Path);
-        }
-
-        private void btn_refresh_Click(object sender, RoutedEventArgs e) {
-            fillInputAudioList();
-        }
-
-        private void btn_inputopen_Click(object sender, RoutedEventArgs e) {
-            Process.Start(inpWavDir);
-        }
-
-        private void btn_outputopen_Click(object sender, RoutedEventArgs e) {
-            Process.Start(outWavDir);
-        }
-
-        private void creditButton_Click(object sender, RoutedEventArgs e) {
-            Process.Start("https://dyy.vin/twitter");
         }
     }
 }
