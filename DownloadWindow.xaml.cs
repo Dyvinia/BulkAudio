@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BulkAudio.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,9 +39,8 @@ namespace BulkAudio {
                 File.Delete(App.BaseDir + "Utils\\version.json");
             }
             catch (Exception e) {
-                string message = "Unable to Download FFmpeg to \\Utils\\ffmpeg.exe" + Environment.NewLine + e.Message;
-                if (e.InnerException != null) message += Environment.NewLine + e.InnerException.Message;
-                MessageBox.Show(message, "BulkAudio", MessageBoxButton.OK, MessageBoxImage.Error);
+                string message = "Unable to Download FFmpeg to Utils\\ffmpeg.exe:";
+                ExceptionDialog.Show(e, "BulkAudio", true, message);
             }
             this.Close();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BulkAudio.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -31,13 +32,9 @@ namespace BulkAudio {
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
-            string title = "Bulk Audio";
-            if (e.Exception.InnerException != null)
-                MessageBox.Show(e.Exception.Message + Environment.NewLine + Environment.NewLine + e.Exception.InnerException, title, MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-                MessageBox.Show(e.Exception.Message, title, MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
-            App.Current.Shutdown();
+            string title = "BulkAudio";
+            ExceptionDialog.Show(e.Exception, title, true);
         }
 
         protected override async void OnStartup(StartupEventArgs e) {

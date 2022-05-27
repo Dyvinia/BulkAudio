@@ -8,6 +8,9 @@
         Title="BulkAudio" Height="500" Width="650"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
         Style="{DynamicResource CustomWindowStyle}" Icon="Resources/Icon.ico">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
     <Grid>
         <Grid Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
             <TextBlock x:Name="txt_Version" Margin="282,31,0,0" TextWrapping="Wrap" Text="vx.x.x" Foreground="#FFF1F1F1" Height="18" VerticalAlignment="Top" FontWeight="Bold" FontSize="10" Width="36" HorizontalAlignment="Left" />
@@ -366,5 +369,7 @@
 
 
         </Grid>
+
+        <ProgressBar x:Name="AudioProgress" Height="5" VerticalAlignment="Bottom" Background="Transparent" Foreground="White" BorderThickness="0"/>
     </Grid>
 </Window>
