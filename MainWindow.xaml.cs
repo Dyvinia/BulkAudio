@@ -52,7 +52,7 @@ namespace BulkAudio {
             txtb_inputpath.Text = App.InpWavDir;
             txtb_outputpath.Text = App.OutWavDir;
 
-            var ext = new List<string> { "wav", "mp3", "ogg", "flac", "m4a" };
+            List<string> ext = new List<string> { "wav", "mp3", "ogg", "flac", "m4a" };
             string[] files = Directory.EnumerateFiles(App.InpWavDir, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s).TrimStart('.').ToLowerInvariant())).ToArray();
 
             foreach (string file in files)
@@ -74,8 +74,8 @@ namespace BulkAudio {
                 string output = ffmpeg.StandardError.ReadToEnd();
                 ffmpeg.WaitForExit();
 
-                string ffmpegjson = output.Substring(output.IndexOf('{'));
-                dynamic results = JsonConvert.DeserializeObject<dynamic>(ffmpegjson);
+                output = output.Substring(output.IndexOf('{'));
+                dynamic results = JsonConvert.DeserializeObject<dynamic>(output);
                 string lufs = results.input_i;
                 string truepeak = results.input_tp;
 
@@ -88,9 +88,9 @@ namespace BulkAudio {
         }
 
         private void ProcessAudio(int extensionIndex, int remixIndex, int? inputLUFS, IProgress<int> progress) {
+            int currentProgress = 1;
             string logString = null;
 
-            int current = 1;
             foreach (FileListItem soundInput in FileList) {
                 string outFile = soundInput.Path.Replace(App.InpWavDir, App.OutWavDir);
 
@@ -120,17 +120,11 @@ namespace BulkAudio {
                         string output = ffmpeg.StandardError.ReadToEnd();
                         ffmpeg.WaitForExit();
 
-                        string ffmpegjson = output.Substring(output.IndexOf('{'));
-                        dynamic results = JsonConvert.DeserializeObject<dynamic>(ffmpegjson);
+                        output = output.Substring(output.IndexOf('{'));
+                        dynamic results = JsonConvert.DeserializeObject<dynamic>(output);
                         float lufs = (float)results.input_i;
                         string volume = (Math.Pow(10, (-(lufs - (Convert.ToInt32(inputLUFS))) / 20))).ToString();
                         segmentvol = $"-af \"volume = {volume}\" ";
-                    }
-
-                    else if (inputLUFS != null && !(inputLUFS > -71 & inputLUFS < -4)) {
-                        SystemSounds.Hand.Play();
-                        Mouse.OverrideCursor = null;
-                        return;
                     }
 
                     ffmpeg.StartInfo.Arguments = $"-y -i \"{soundInput.Path}\" {segmentvol}{remix}\"{outFile}\"";
@@ -138,7 +132,7 @@ namespace BulkAudio {
                     ffmpeg.Start();
                     ffmpeg.WaitForExit();
 
-                    progress.Report(current++);
+                    progress.Report(currentProgress++);
                 }
 
                 //Save output

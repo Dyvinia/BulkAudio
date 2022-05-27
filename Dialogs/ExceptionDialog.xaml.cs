@@ -54,6 +54,7 @@ namespace BulkAudio.Dialogs {
 
         public static void Show(Exception ex, string title, bool isCrash = false, string messagePrefix = null) {
             Application.Current.Dispatcher.Invoke(() => {
+                Mouse.OverrideCursor = null;
                 ExceptionDialog window = new ExceptionDialog(ex, title, isCrash, messagePrefix);
                 window.ShowDialog();
             });

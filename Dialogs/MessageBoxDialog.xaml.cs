@@ -43,6 +43,7 @@ namespace BulkAudio.Dialogs {
         }
 
         public static MessageBoxResult Show(string message, string title, MessageBoxButton buttons, DialogSound sound = DialogSound.None) {
+            Mouse.OverrideCursor = null;
             MessageBoxResult msgBoxResult = MessageBoxResult.None;
             Application.Current.Dispatcher.Invoke(() => {
                 MessageBoxDialog window = new MessageBoxDialog(message, title, buttons, sound);
