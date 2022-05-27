@@ -130,7 +130,6 @@ namespace BulkAudio {
                     ffmpeg.StartInfo.Arguments = $"-y -i \"{soundInput.Path}\" {segmentvol}{remix}\"{outFile}\"";
                     logString += $"> ffmpeg {ffmpeg.StartInfo.Arguments}\r\n";
                     ffmpeg.Start();
-                    ffmpeg.WaitForExit();
 
                     progress.Report(currentProgress++);
                 }
