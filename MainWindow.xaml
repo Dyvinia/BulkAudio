@@ -13,7 +13,7 @@
     </Window.TaskbarItemInfo>
     <Grid>
         <Grid Margin="0,8,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <TextBlock x:Name="txt_Version" Margin="282,31,0,0" TextWrapping="Wrap" Text="vx.x.x" Foreground="#FFF1F1F1" Height="18" VerticalAlignment="Top" FontWeight="Bold" FontSize="10" Width="36" HorizontalAlignment="Left" />
+            <TextBlock x:Name="VersionText" Margin="282,31,0,0" TextWrapping="Wrap" Text="vx.x.x" Foreground="#FFF1F1F1" Height="18" VerticalAlignment="Top" FontWeight="Bold" FontSize="10" Width="36" HorizontalAlignment="Left" />
             <Image VerticalAlignment="Center" Height="54" HorizontalAlignment="Left" Margin="2,0,0,0">
                 <Image.Source>
                     <DrawingImage>
@@ -54,10 +54,10 @@
                     </DrawingImage>
                 </Image.Source>
             </Image>
-            <Button Name="creditButton" Margin="259,45,25,0" Opacity="0" />
+            <Button Name="CreditButton" Margin="259,45,25,0" Opacity="0" />
         </Grid>
 
-        <Button HorizontalAlignment="Right" Margin="0,6,6,0" VerticalAlignment="Top" Width="20" Height="20" Click="btn_anal_Click" ToolTip="Analyse Loudness and True Peak of an audio file (LUFS &amp; dB)">
+        <Button HorizontalAlignment="Right" Margin="0,6,6,0" VerticalAlignment="Top" Width="20" Height="20" Click="AnalyzeButton_Click" ToolTip="Analyse Loudness and True Peak of an audio file (LUFS &amp; dB)">
             <Image Source="Resources/info20.png"/>
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
@@ -88,7 +88,7 @@
 
         <Grid Margin="5,70,5,5" Background="#FF141414">
             <TextBlock Margin="26,14,502,0" TextWrapping="Wrap" Text="Input Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
-            <Button x:Name="btn_clearInput" Margin="469,23,0,0" Click="btn_clearInput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Button x:Name="ClearInput" Margin="469,23,0,0" Click="ClearInput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <Button.ToolTip>
                     <ToolTip Background="Black" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
                         Clear Input Folder
@@ -118,12 +118,12 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <TextBox x:Name="txtb_inputpath" Height="20" Margin="25,35,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
-            <Button x:Name="btn_inputselect" Content="Select..." Margin="484,35,0,0" Height="20" HorizontalAlignment="Left" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
-            <Button x:Name="btn_inputopen" Content="Open" Margin="0,35,25,0" Height="20" HorizontalAlignment="Right" Width="62" VerticalAlignment="Top"/>
+            <TextBox x:Name="InputPath" Height="20" Margin="25,35,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
+            <Button x:Name="InputSelect" Content="Select..." Margin="484,35,0,0" Height="20" HorizontalAlignment="Left" Width="62" Click="InputSelect_Click" VerticalAlignment="Top"/>
+            <Button x:Name="InputOpen" Content="Open" Margin="0,35,25,0" Height="20" HorizontalAlignment="Right" Width="62" VerticalAlignment="Top"/>
 
             <TextBlock Margin="26,59,502,0" TextWrapping="Wrap" Text="Output Folder" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
-            <Button x:Name="btn_clearOutput" Margin="469,68,0,0" Click="btn_clearOutput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Button x:Name="ClearOutput" Margin="469,68,0,0" Click="ClearOutput_Click" Background="Transparent" BorderBrush="Transparent" Width="10" Height="11" FontSize="6px" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <Button.ToolTip>
                     <ToolTip Background="Black" FontFamily="Segoe UI" FontSize="12px" TextOptions.TextRenderingMode="Auto"  TextOptions.TextFormattingMode="Ideal">
                         Clear Output Folder
@@ -153,16 +153,16 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <TextBox x:Name="txtb_outputpath" Height="20" Margin="25,80,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
-            <Button x:Name="btn_outputselect" Content="Select..." Margin="0,80,92,0" Height="20" HorizontalAlignment="Right" Width="62" Click="btn_inputselect_Click" VerticalAlignment="Top"/>
-            <Button x:Name="btn_outputopen" Content="Open" Margin="0,80,25,0" Height="20" HorizontalAlignment="Right" Width="62" VerticalAlignment="Top"/>
+            <TextBox x:Name="OutputPath" Height="20" Margin="25,80,159,0" TextWrapping="Wrap" Text="" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" VerticalAlignment="Top" IsEnabled="False" VerticalScrollBarVisibility="Disabled"/>
+            <Button x:Name="OutputSelect" Content="Select..." Margin="0,80,92,0" Height="20" HorizontalAlignment="Right" Width="62" Click="OutputSelect_Click" VerticalAlignment="Top"/>
+            <Button x:Name="OutputOpen" Content="Open" Margin="0,80,25,0" Height="20" HorizontalAlignment="Right" Width="62" VerticalAlignment="Top"/>
 
             <Separator Height="10" Margin="0,110,0,0" VerticalAlignment="Top" Background="#FF323232"/>
 
             <TextBlock Margin="25,124,0,0" TextWrapping="Wrap" Text="Normalize (LUFS)" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
 
             <Grid Height="20" Width="175" Margin="25,145,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
-                <TextBox x:Name="txtb_loudness" TextWrapping="Wrap" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" PreviewTextInput="NumberValidationTextBox" PreviewKeyDown="KeyValidationTextBox" ToolTip="Range: -5 to -70" />
+                <TextBox x:Name="LoudnessInput" TextWrapping="Wrap" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" PreviewTextInput="NumberValidationTextBox" PreviewKeyDown="KeyValidationTextBox" ToolTip="Range: -5 to -70" />
 
                 <TextBlock IsHitTestVisible="False" Text="No Change" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,0,0,0" Foreground="#FFF1F1F1" Opacity="0.25">
                     <TextBlock.Style>
@@ -180,7 +180,7 @@
 
             <TextBlock Margin="26,169,0,0" TextWrapping="Wrap" Text="Audio Format" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
 
-            <ComboBox x:Name="combo_channels" Margin="25,190,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" HorizontalAlignment="Left" Width="175">
+            <ComboBox x:Name="ExtensionComboBox" Margin="25,190,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" HorizontalAlignment="Left" Width="175">
                 <ComboBoxItem Content="No Change"/>
                 <ComboBoxItem Content="WAV"/>
                 <ComboBoxItem Content="MP3"/>
@@ -189,7 +189,7 @@
             </ComboBox>
 
             <TextBlock Margin="26,217,0,0" TextWrapping="Wrap" Text="Remix Channels" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="175"/>
-            <ComboBox x:Name="remix_channels" Margin="25,238,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" HorizontalAlignment="Left" Width="175">
+            <ComboBox x:Name="RemixComboBox" Margin="25,238,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" HorizontalAlignment="Left" Width="175">
                 <ComboBoxItem Content="No Change"/>
                 <ComboBoxItem Content="Mono"/>
                 <ComboBoxItem Content="Stereo"/>
@@ -197,7 +197,7 @@
 
 
             <TextBlock Margin="216,124,221,0" TextWrapping="Wrap" Text="Audio Files" Foreground="#FFF1F1F1" FontSize="14" Height="20" FontWeight="Bold" VerticalAlignment="Top"/>
-            <Button x:Name="btn_refresh" Margin="0,123,24,0" HorizontalAlignment="Right" Height="20" Width="20" VerticalAlignment="Top">
+            <Button x:Name="RefreshButton" Margin="0,123,24,0" HorizontalAlignment="Right" Height="20" Width="20" VerticalAlignment="Top">
                 <StackPanel>
                     <Image Margin="3">
                         <Image.Source>
@@ -239,7 +239,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <ListBox x:Name="audioListBox" Height="160" Width="398" Margin="215,145,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+            <ListBox x:Name="AudioListBox" Height="160" Width="398" Margin="215,145,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Background="#FF141414" BorderBrush="#FF323232" Foreground="#FFF1F1F1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -251,12 +251,12 @@
                                 <ColumnDefinition Width="16"/>
                                 <ColumnDefinition Width="1"/>
                                 <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="1"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" ToolTip="{Binding Path}"/>
 
-                            <Button x:Name="analyzeAudio" Grid.Column="2" Click="analyzeAudio_Click" ToolTip="Analyse Loudness and True Peak of an audio file (LUFS &amp; dB)" Background="Transparent">
+                            <Button x:Name="AnalyzeAudio" Grid.Column="2" Click="AnalyzeAudio_Click" ToolTip="Analyse Loudness and True Peak of an audio file (LUFS &amp; dB)" Background="Transparent">
                                 <Image Source="Resources/info.png"/>
                                 <Button.Style>
                                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
@@ -279,7 +279,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button x:Name="openAudioFolder" Grid.Column="4" Click="openAudioFolder_Click" ToolTip="Opens Folder" Background="Transparent">
+                            <Button x:Name="openAudioFolder" Grid.Column="4" Click="OpenAudioFolder_Click" ToolTip="Opens Folder" Background="Transparent">
                                 <Image Source="Resources/folder.png"/>
                                 <Button.Style>
                                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
@@ -302,7 +302,7 @@
                                 </Button.Template>
                             </Button>
                             
-                            <Button x:Name="playAudio" Grid.Column="6" Click="playAudio_Click" ToolTip="Plays Audio File">
+                            <Button x:Name="playAudio" Grid.Column="6" Click="PlayAudio_Click" ToolTip="Plays Audio File">
                                 <Image Source="Resources/play.png" />
                                 <Button.Style>
                                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
@@ -365,7 +365,7 @@
 
             <Separator Height="10" Margin="0,315,0,0" VerticalAlignment="Top" Background="#FF323232"/>
 
-            <Button x:Name="btn_run" Content="Process Audio" Margin="0,337,0,0" Height="40" Click="btn_run_Click" HorizontalAlignment="Center" Width="150" VerticalAlignment="Top"/>
+            <Button x:Name="btn_run" Content="Process Audio" Margin="0,337,0,0" Height="40" Click="ProcessAudio_Click" HorizontalAlignment="Center" Width="150" VerticalAlignment="Top"/>
 
 
         </Grid>
