@@ -33,7 +33,7 @@ namespace BulkAudio {
 
         protected override async void OnStartup(StartupEventArgs e) {
             MainWindow = new MainWindow();
-            if (!File.Exists(BaseDir + "Utils\\ffmpeg.exe"))
+            if (!File.Exists(FFmpegDir))
                 await ShowPopup(new DownloadWindow());
             MainWindow.Show();
         }
