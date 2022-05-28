@@ -2,7 +2,7 @@
 A tool to process/convert multiple audio files at once
 
 #### [Download the latest release here](https://github.com/Dyvinia/BulkAudio/releases)
-![image](https://i.imgur.com/1SpsNyn.png)
+![image](https://i.imgur.com/yHYDal4.png)
 <details>
   <summary>
     <h5>New Features Preview</h5>
