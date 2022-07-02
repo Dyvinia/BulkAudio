@@ -13,7 +13,7 @@ namespace BulkAudio {
     public class Config : SettingsManager<Config> {
         public bool UpdateChecker { get; set; } = true;
 
-        public string InDir { get; set; } = App.BaseDir + "Output";
+        public string InDir { get; set; } = App.BaseDir + "Input";
         public string OutDir { get; set; } = App.BaseDir + "Output";
         public string UtilsDir { get; set; } = App.BaseDir + "Utils";
     }

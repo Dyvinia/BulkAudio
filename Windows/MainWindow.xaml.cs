@@ -42,6 +42,8 @@ namespace BulkAudio {
             AudioListBox.ItemsSource = FileList;
             VersionText.Text = App.Version;
 
+            DataContext = Config.Settings;
+
             FillAudioList();
         }
 
@@ -49,8 +51,6 @@ namespace BulkAudio {
             Mouse.OverrideCursor = Cursors.Wait;
 
             FileList.Clear();
-            InputPath.Text = Config.Settings.InDir;
-            OutputPath.Text = Config.Settings.OutDir;
 
             List<string> ext = new() { "wav", "mp3", "ogg", "flac", "m4a" };
             string[] files = Directory.EnumerateFiles(Config.Settings.InDir, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s).TrimStart('.').ToLowerInvariant())).ToArray();
