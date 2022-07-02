@@ -14,6 +14,7 @@ namespace BulkAudio {
     [AddINotifyPropertyChangedInterface]
     public class Config : SettingsManager<Config> {
         public bool UpdateChecker { get; set; } = true;
+        public bool OpenOutputWhenDone { get; set; } = true;
 
         public string InDir { get; set; } = App.BaseDir + "Input";
         public string OutDir { get; set; } = App.BaseDir + "Output";

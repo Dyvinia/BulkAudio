@@ -45,6 +45,7 @@ namespace BulkAudio {
             VersionText.Text = App.Version;
 
             DataContext = Config.Settings;
+            Config.Save();
 
             FillAudioList();
         }
@@ -169,7 +170,8 @@ namespace BulkAudio {
                 Mouse.OverrideCursor = null;
                 SystemSounds.Exclamation.Play();
 
-                Process.Start(new ProcessStartInfo(Config.Settings.OutDir) { UseShellExecute = true });
+                if (Config.Settings.OpenOutputWhenDone)
+                    Process.Start(new ProcessStartInfo(Config.Settings.OutDir) { UseShellExecute = true });
 
                 // Reset Progress Bar
                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
@@ -221,6 +223,7 @@ namespace BulkAudio {
             };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 Config.Settings.InDir = dialog.FileName;
+            Config.Save();
             FillAudioList();
         }
 
@@ -232,6 +235,7 @@ namespace BulkAudio {
             };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 Config.Settings.OutDir = dialog.FileName;
+            Config.Save();
             FillAudioList();
         }
 
