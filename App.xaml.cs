@@ -7,9 +7,11 @@ using System.Windows.Threading;
 using DyviniaUtils;
 using DyviniaUtils.Dialogs;
 using DyviniaUtils.SettingsManager;
+using PropertyChanged;
 
 namespace BulkAudio {
 
+    [AddINotifyPropertyChangedInterface]
     public class Config : SettingsManager<Config> {
         public bool UpdateChecker { get; set; } = true;
 
