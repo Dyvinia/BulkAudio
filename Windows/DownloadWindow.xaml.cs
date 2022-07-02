@@ -1,46 +1,51 @@
-﻿using BulkAudio.Dialogs;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Windows.Shell;
+using DyviniaUtils;
 
 namespace BulkAudio {
     /// <summary>
     /// Interaction logic for DownloadWindow.xaml
     /// </summary>
     public partial class DownloadWindow : Window {
+        public static readonly string TempDir = Path.Combine(Config.Settings.UtilsDir, ".temp");
 
         public DownloadWindow() {
             InitializeComponent();
-            this.Close();
-            //IProgress<ProgressInfo> progress = new Progress<ProgressInfo>(report => {
-            //    pbStatus.Value = report.DownloadedBytes;
-            //    pbStatus.Maximum = report.TotalBytes;
-            //});
-            //DownloadFFmpeg(progress);
+            Startup();
         }
 
-        //public async void DownloadFFmpeg(IProgress<ProgressInfo> progress) {
-        //    try {
-        //        await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, App.BaseDir + "Utils\\", progress);
-        //        File.Delete(App.BaseDir + "Utils\\ffprobe.exe");
-        //        File.Delete(App.BaseDir + "Utils\\version.json");
-        //    }
-        //    catch (Exception e) {
-        //        string message = "Unable to Download FFmpeg to Utils\\ffmpeg.exe:";
-        //        ExceptionDialog.Show(e, "BulkAudio", true, message);
-        //    }
-        //    this.Close();
-        //}
+        public async void Startup() {
+
+            IProgress<double> progress = new Progress<double>(p => {
+                pbStatus.Value = p;
+                TaskbarItemInfo.ProgressValue = p;
+            });
+
+            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+            Directory.CreateDirectory(TempDir);
+            await DownloadFFmpeg(progress);
+            await Task.Delay(200);
+            Directory.Delete(TempDir, true);
+            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+
+            this.Close();
+        }
+
+        public async static Task DownloadFFmpeg(IProgress<double> progress) {
+            string destination = $"{TempDir}\\ffmpeg.zip";
+            string url = "https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip";
+
+            await Downloader.Download(url, destination, progress);
+
+            using ZipArchive archive = ZipFile.OpenRead(destination);
+            foreach (ZipArchiveEntry entry in archive.Entries.Where(e => e.FullName.Contains("ffmpeg.exe"))) {
+                entry.ExtractToFile(Path.Combine(Config.Settings.UtilsDir, entry.Name), true);
+            }
+        }
     }
 }

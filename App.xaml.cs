@@ -1,45 +1,56 @@
-﻿using BulkAudio.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using BulkAudio.SettingsManager;
+using DyviniaUtils;
+using DyviniaUtils.Dialogs;
 
 namespace BulkAudio {
+
+    public class Config : SettingsManager<Config> {
+        public bool UpdateChecker { get; set; } = true;
+
+        public string InDir { get; set; } = App.BaseDir + "Output";
+        public string OutDir { get; set; } = App.BaseDir + "Output";
+        public string UtilsDir { get; set; } = App.BaseDir + "Utils";
+    }
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
 
-        public static readonly string Version = "v" + Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5);
+        public static readonly string Version = "v" + Assembly.GetExecutingAssembly().GetName().Version.ToString()[..5];
         public static readonly string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
-
-        public static string InpWavDir = BaseDir + "Input";
-        public static string OutWavDir = BaseDir + "Output";
-        public static string FFmpegDir = BaseDir + "Utils\\ffmpeg.exe";
+        public static readonly string AppName = Assembly.GetEntryAssembly().GetName().Name;
 
         public App() {
-            DispatcherUnhandledException += Application_DispatcherUnhandledException;
+            Config.Load();
 
-            Directory.CreateDirectory(InpWavDir);
-            Directory.CreateDirectory(OutWavDir);
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+            Directory.CreateDirectory(Config.Settings.InDir);
+            Directory.CreateDirectory(Config.Settings.OutDir);
+
+            DispatcherUnhandledException += Application_DispatcherUnhandledException;
         }
 
         protected override async void OnStartup(StartupEventArgs e) {
             MainWindow = new MainWindow();
-            if (!File.Exists(FFmpegDir))
+            if (!File.Exists(Config.Settings.UtilsDir + "\\ffmpeg.exe"))
                 await ShowPopup(new DownloadWindow());
             MainWindow.Show();
+
+            if (Config.Settings.UpdateChecker)
+                Check.Version("Dyvinia", "BulkAudio");
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
             e.Handled = true;
-            string title = "BulkAudio";
+            string title = AppName;
             ExceptionDialog.Show(e.Exception, title, true);
         }
 
@@ -50,5 +61,6 @@ namespace BulkAudio {
             popup.Focus();
             return task.Task;
         }
+
     }
 }

@@ -12,10 +12,13 @@
         AllowsTransparency="True"
         Cursor="Wait"
         Title="DownloadWindow" Height="100" Width="400">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
     <Grid Background="#FF2D2D2D">
         <Grid Margin="5,5,5,5" Background="#FF141414">
-            <TextBlock Text="Downloading FFmpeg" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ProgressBar Name="pbStatus" Height="16" VerticalAlignment="Bottom" Background="Transparent" Foreground="White" BorderThickness="0"/>
+            <TextBlock Text="Downloading Libraries" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ProgressBar Name="pbStatus" Height="5" Maximum="1" VerticalAlignment="Bottom" Background="Transparent" Foreground="White" BorderThickness="0"/>
         </Grid>
     </Grid>
 </Window>

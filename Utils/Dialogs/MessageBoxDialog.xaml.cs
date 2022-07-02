@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace BulkAudio.Dialogs {
+namespace DyviniaUtils.Dialogs {
     public enum DialogSound {
         None,
         Notify,
