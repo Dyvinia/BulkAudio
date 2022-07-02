@@ -27,7 +27,7 @@ namespace DyviniaUtils {
                 int bytesRead = await contentStream.ReadAsync(buffer);
                 if (bytesRead == 0) {
                     isMoreToRead = false;
-                    progress.Report((double)((double)totalBytesRead / totalBytes));
+                    progress.Report((double)totalBytesRead / (double)totalBytes);
                     continue;
                 }
 
@@ -37,7 +37,7 @@ namespace DyviniaUtils {
                 readCount++;
 
                 if (readCount % 100 == 0) {
-                    progress.Report((double)((double)totalBytesRead / totalBytes));
+                    progress.Report((double)totalBytesRead / (double)totalBytes);
                 }
             }
             while (isMoreToRead);
