@@ -1,8 +1,4 @@
-﻿using BulkAudio.Dialogs;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,6 +12,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shell;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using Newtonsoft.Json;
+using BulkAudio.Dialogs;
 
 namespace BulkAudio {
     /// <summary>

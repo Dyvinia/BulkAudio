@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Xabe.FFmpeg.Downloader;
 
 namespace BulkAudio {
     /// <summary>
