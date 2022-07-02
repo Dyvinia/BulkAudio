@@ -16,6 +16,8 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 using DyviniaUtils.Dialogs;
+using System.Text;
+using System.Collections.Concurrent;
 
 namespace BulkAudio {
     /// <summary>
@@ -86,26 +88,28 @@ namespace BulkAudio {
             MessageBoxDialog.Show(message, title, MessageBoxButton.OK, DialogSound.Notify);
         }
 
-        private void ProcessAudio(int extensionIndex, int remixIndex, int? inputLUFS, IProgress<int> progress) {
+        private async Task ProcessAudio(int extensionIndex, int remixIndex, int? inputLUFS, IProgress<int> progress) {
             int currentProgress = 1;
-            string logString = null;
+            progress.Report(currentProgress);
+            ConcurrentBag<string> log = new();
 
-            foreach (FileListItem soundInput in FileList) {
-                string outFile = soundInput.Path.Replace(Config.Settings.InDir, Config.Settings.OutDir);
+            await Task.Run(async () => {
+                Parallel.ForEach(FileList, soundInput => {
+                    string outFile = soundInput.Path.Replace(Config.Settings.InDir, Config.Settings.OutDir);
 
-                if (extensionIndex == 1) outFile = Path.ChangeExtension(outFile, ".wav");
-                if (extensionIndex == 2) outFile = Path.ChangeExtension(outFile, ".mp3");
-                if (extensionIndex == 3) outFile = Path.ChangeExtension(outFile, ".flac");
-                if (extensionIndex == 4) outFile = Path.ChangeExtension(outFile, ".ogg");
+                    if (extensionIndex == 1) outFile = Path.ChangeExtension(outFile, ".wav");
+                    if (extensionIndex == 2) outFile = Path.ChangeExtension(outFile, ".mp3");
+                    if (extensionIndex == 3) outFile = Path.ChangeExtension(outFile, ".flac");
+                    if (extensionIndex == 4) outFile = Path.ChangeExtension(outFile, ".ogg");
 
-                string remix = "";
-                if (remixIndex == 1) remix = "-ac 1 ";
-                if (remixIndex == 2) remix = "-ac 2 ";
+                    string remix = "";
+                    if (remixIndex == 1) remix = "-ac 1 ";
+                    if (remixIndex == 2) remix = "-ac 2 ";
 
-                Directory.CreateDirectory(Path.GetDirectoryName(outFile));
+                    Directory.CreateDirectory(Path.GetDirectoryName(outFile));
 
-                //FFMpeg
-                using (Process ffmpeg = new()) {
+                    //FFMpeg
+                    using Process ffmpeg = new();
                     ffmpeg.StartInfo.FileName = Config.Settings.UtilsDir + "\\ffmpeg.exe";
                     ffmpeg.StartInfo.CreateNoWindow = true;
                     ffmpeg.StartInfo.UseShellExecute = false;
@@ -114,7 +118,7 @@ namespace BulkAudio {
 
                     if (inputLUFS != null && (inputLUFS > -71 & inputLUFS < -4)) {
                         ffmpeg.StartInfo.Arguments = $"-y -i \"{soundInput.Path}\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
-                        logString += $"> ffmpeg {ffmpeg.StartInfo.Arguments}\r\n";
+                        log.Add($"> ffmpeg {ffmpeg.StartInfo.Arguments}");
                         ffmpeg.Start();
                         string output = ffmpeg.StandardError.ReadToEnd();
                         ffmpeg.WaitForExit();
@@ -127,15 +131,17 @@ namespace BulkAudio {
                     }
 
                     ffmpeg.StartInfo.Arguments = $"-y -i \"{soundInput.Path}\" {segmentvol}{remix}\"{outFile}\"";
-                    logString += $"> ffmpeg {ffmpeg.StartInfo.Arguments}\r\n";
+                    log.Add($"> ffmpeg {ffmpeg.StartInfo.Arguments}");
                     ffmpeg.Start();
+                    ffmpeg.WaitForExit();
 
                     progress.Report(currentProgress++);
-                }
+                });
+                await Task.Delay(200);
+            });
 
-                //Save output
-                File.WriteAllText(Config.Settings.UtilsDir + "\\log.txt", logString);
-            }
+            //Save output
+            File.WriteAllText(Config.Settings.UtilsDir + "\\log.txt", String.Join(Environment.NewLine, log));
         }
 
         private async void ProcessAudio_Click(object sender, RoutedEventArgs e) {
@@ -158,7 +164,7 @@ namespace BulkAudio {
                 if (LoudnessInput.Text != "")
                     inputLUFS = Convert.ToInt32(LoudnessInput.Text);
 
-                await Task.Run(() => ProcessAudio(extensionIndex, remixIndex, inputLUFS, progress));
+                await ProcessAudio(extensionIndex, remixIndex, inputLUFS, progress);
 
                 Mouse.OverrideCursor = null;
 
