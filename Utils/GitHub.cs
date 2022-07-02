@@ -8,8 +8,8 @@ using DyviniaUtils.Dialogs;
 
 
 namespace DyviniaUtils {
-    class Check {
-        public async static void Version(string repoAuthor, string repoName) {
+    class GitHub {
+        public async static void CheckVersion(string repoAuthor, string repoName) {
             try {
                 using HttpClient client = new();
                 client.DefaultRequestHeaders.Add("User-Agent", "request");
@@ -20,7 +20,7 @@ namespace DyviniaUtils {
 
                 if (local.CompareTo(latest) < 0) {
                     string message = $"You are using {repoName} v{local.ToString()[..5]}. \nWould you like to download the latest version? (v{latest})";
-                    MessageBoxResult Result = MessageBoxDialog.Show(message, "FrostyFix", MessageBoxButton.YesNo, DialogSound.Notify);
+                    MessageBoxResult Result = MessageBoxDialog.Show(message, repoName, MessageBoxButton.YesNo, DialogSound.Notify);
                     if (Result == MessageBoxResult.Yes) {
                         Process.Start(new ProcessStartInfo($"https://github.com/{repoAuthor}/{repoName}/releases/latest") { UseShellExecute = true });
                     }

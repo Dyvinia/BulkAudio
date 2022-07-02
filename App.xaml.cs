@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using BulkAudio.SettingsManager;
 using DyviniaUtils;
 using DyviniaUtils.Dialogs;
+using DyviniaUtils.SettingsManager;
 
 namespace BulkAudio {
 
@@ -45,7 +45,7 @@ namespace BulkAudio {
             MainWindow.Show();
 
             if (Config.Settings.UpdateChecker)
-                Check.Version("Dyvinia", "BulkAudio");
+                GitHub.CheckVersion("Dyvinia", "BulkAudio");
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
