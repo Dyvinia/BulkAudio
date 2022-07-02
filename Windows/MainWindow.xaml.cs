@@ -167,6 +167,7 @@ namespace BulkAudio {
                 await ProcessAudio(extensionIndex, remixIndex, inputLUFS, progress);
 
                 Mouse.OverrideCursor = null;
+                SystemSounds.Exclamation.Play();
 
                 Process.Start(new ProcessStartInfo(Config.Settings.OutDir) { UseShellExecute = true });
 
