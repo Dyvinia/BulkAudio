@@ -64,29 +64,47 @@ namespace BulkAudio {
             Mouse.OverrideCursor = null;
         }
 
-        public void AnalyzeAudio(string filePath) {
-            using Process ffmpeg = new();
+        public async void AnalyzeAudio(string filePath) {
+            IProgress<int> progress = new Progress<int>(p => {
+                AudioProgress.Value = p;
+                AudioProgress.Maximum = 12;
+                TaskbarItemInfo.ProgressValue = (double)p / 12;
+            });
+
+            progress.Report(1);
             Mouse.OverrideCursor = Cursors.Wait;
+            AudioProgress.Visibility = Visibility.Visible;
+            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
 
-            ffmpeg.StartInfo.FileName = Config.Settings.UtilsDir + "\\ffmpeg.exe";
-            ffmpeg.StartInfo.CreateNoWindow = true;
-            ffmpeg.StartInfo.Arguments = $"-y -i \"{filePath}\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
-            ffmpeg.StartInfo.UseShellExecute = false;
-            ffmpeg.StartInfo.RedirectStandardError = true;
-            ffmpeg.Start();
-            string output = ffmpeg.StandardError.ReadToEnd();
-            ffmpeg.WaitForExit();
+            await Task.Run(async () => {
+                using Process ffmpeg = new();
+                ffmpeg.StartInfo.FileName = Config.Settings.UtilsDir + "\\ffmpeg.exe";
+                ffmpeg.StartInfo.CreateNoWindow = true;
+                ffmpeg.StartInfo.Arguments = $"-y -i \"{filePath}\" -af \"adelay=3s:all=true\",loudnorm=print_format=json -f null -";
+                ffmpeg.StartInfo.UseShellExecute = false;
+                ffmpeg.StartInfo.RedirectStandardError = true;
+                ffmpeg.Start();
+                string output = ffmpeg.StandardError.ReadToEnd();
+                progress.Report(6);
+                ffmpeg.WaitForExit();
 
-            output = output[output.IndexOf('{')..];
-            dynamic results = JsonConvert.DeserializeObject<dynamic>(output);
-            string lufs = results.input_i;
-            string truepeak = results.input_tp;
+                output = output[output.IndexOf('{')..];
+                dynamic results = JsonConvert.DeserializeObject<dynamic>(output);
+                string lufs = results.input_i;
+                string truepeak = results.input_tp;
+                progress.Report(12);
+                await Task.Delay(200);
 
-            Mouse.OverrideCursor = null;
+                Dispatcher.Invoke(() => {
+                    AudioProgress.Visibility = Visibility.Collapsed;
+                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                    Mouse.OverrideCursor = null;
 
-            string title = "BulkAudio: Analyze Audio";
-            string message = $"Loudness: {lufs}LUFS" + Environment.NewLine + $"True Peak: {truepeak}dB";
-            MessageBoxDialog.Show(message, title, MessageBoxButton.OK, DialogSound.Notify);
+                    string title = "BulkAudio: Analyze Audio";
+                    string message = $"Loudness: {lufs}LUFS" + Environment.NewLine + $"True Peak: {truepeak}dB";
+                    MessageBoxDialog.Show(message, title, MessageBoxButton.OK, DialogSound.Notify);
+                });
+            });
         }
 
         private async Task ProcessAudio(int extensionIndex, int remixIndex, int? inputLUFS, IProgress<int> progress) {
